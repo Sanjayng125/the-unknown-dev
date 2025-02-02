@@ -29,7 +29,7 @@ const UpdateInfo = () => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-1">
         <p className="text-xl font-bold">Name</p>
         <input
           type="text"
@@ -44,7 +44,7 @@ const UpdateInfo = () => {
           }
         />
       </div>
-      <div className="flex flex-col mt-5">
+      <div className="flex flex-col mt-5 gap-1">
         <p className="text-xl font-bold">Welcome Message</p>
         <input
           className="bg-gray-950 p-3 rounded-xl border"
@@ -58,7 +58,7 @@ const UpdateInfo = () => {
           }
         />
       </div>
-      <div className="flex flex-col mt-5">
+      <div className="flex flex-col mt-5 gap-1">
         <p className="text-xl font-bold">Sub</p>
         <textarea
           rows={6}

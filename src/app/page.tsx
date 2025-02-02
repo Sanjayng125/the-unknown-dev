@@ -23,7 +23,9 @@ const Page = () => {
   return (
     <div className="w-full h-full pt-5 px-2 sm:px-10 flex flex-col items-center relative">
       {store.loading && !store.name && <Loader />}
-      {!store.loading && (
+      {store.loading && !store?.name ? (
+        <></>
+      ) : (
         <>
           <div className="flex md:h-[85vh] md:items-center">
             <div className="flex flex-col w-full">
@@ -81,7 +83,9 @@ const Page = () => {
 
             <div
               className={`${
-                store?.projects?.length > 0 ? "grid sm:grid-cols-2" : ""
+                store?.projects?.length > 0
+                  ? "grid sm:grid-cols-2 place-content-center lg:grid-cols-3"
+                  : ""
               } gap-5 mt-5 w-full`}
             >
               {store?.projects?.length > 0 &&

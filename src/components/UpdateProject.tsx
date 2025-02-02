@@ -124,7 +124,9 @@ const UpdateProject = () => {
 
       <div
         className={`${
-          projects?.length > 0 ? "grid sm:grid-cols-2" : ""
+          projects?.length > 0
+            ? "grid sm:grid-cols-2  place-content-center lg:grid-cols-3 border-t-2 pt-3"
+            : ""
         } gap-5 mt-5 w-full`}
       >
         {projects?.length > 0 &&

@@ -14,7 +14,7 @@ const Project = ({
   onRemove?: (id: string) => void;
 }) => {
   return (
-    <div className="flex flex-col items-center gap-2 border-2 p-2 rounded-xl">
+    <div className="flex flex-col items-center gap-2 border-2 p-2 rounded-xl max-w-[30rem]">
       <div className="w-full relative">
         <a href={project?.visitUrl || project?.visit || "/"} target="_blank">
           <div className="absolute bg-black bg-opacity-0 w-full h-full flex justify-center items-center hover:bg-opacity-50">
