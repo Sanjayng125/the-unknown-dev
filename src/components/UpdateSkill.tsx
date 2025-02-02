@@ -12,6 +12,7 @@ const UpdateSkill = () => {
 
   const refreshSkills = async () => {
     try {
+      setLoading(true);
       const skills = await getMySkills();
       if (skills?.success && skills?.skills?.length) {
         setSkills(skills.skills);
@@ -19,6 +20,8 @@ const UpdateSkill = () => {
     } catch (error) {
       console.log(error);
       alert("Something went wrong while getting skills");
+    } finally {
+      setLoading(false);
     }
   };
 

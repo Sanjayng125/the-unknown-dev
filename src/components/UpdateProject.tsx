@@ -10,18 +10,23 @@ const UpdateProject = () => {
   const [projectGithub, setProjectGithub] = useState("");
   const [projectImg, setProjectImg] = useState("");
   const [projectVisitUrl, setProjectVisitUrl] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
 
   const { loading, setLoading, projects, setProjects } = useDetailsStore();
 
   const refreshProjects = async () => {
     try {
-      const projects = await getMyProjects();
-      if (projects?.success && projects?.projects?.length) {
-        setProjects(projects.projects);
+      setLoading(true);
+      const res = await getMyProjects();
+
+      if (res?.success) {
+        setProjects(res.projects);
       }
     } catch (error) {
       console.log(error);
       alert("Something went wrong while getting projects");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,7 +37,8 @@ const UpdateProject = () => {
         projectName,
         projectGithub,
         projectImg,
-        projectVisitUrl
+        projectVisitUrl,
+        projectDescription
       );
       if (res?.success) {
         await refreshProjects();
@@ -40,6 +46,7 @@ const UpdateProject = () => {
         setProjectName("");
         setProjectGithub("");
         setProjectImg("");
+        setProjectDescription("");
         setProjectVisitUrl("");
       }
       alert(res?.message);
@@ -98,6 +105,13 @@ const UpdateProject = () => {
           value={projectVisitUrl}
           onChange={(e) => setProjectVisitUrl(e.target.value)}
           placeholder="Project Visit Url"
+        />
+        <textarea
+          className="bg-gray-950 p-3 rounded-xl border resize-none"
+          rows={4}
+          value={projectDescription}
+          onChange={(e) => setProjectDescription(e.target.value)}
+          placeholder="Project Description *"
         />
         <button
           className="bg-blue-500 text-white p-2 rounded-xl w-max disabled:bg-opacity-50"

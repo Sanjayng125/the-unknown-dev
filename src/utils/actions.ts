@@ -32,7 +32,7 @@ export const editDetails = async (name: string, welcomeMsg: string, sub: string)
         const data = await res.json();
 
         if (!data.success) {
-            return { message: "Cannot update details!", success: false }
+            return { message: data?.message || "Cannot update details!", success: false }
         }
 
         return { message: "Details updated!", success: true, details: data.details }
@@ -42,8 +42,8 @@ export const editDetails = async (name: string, welcomeMsg: string, sub: string)
     }
 }
 
-export const addProject = async (name: string, github: string, img: string, visitUrl: string = "") => {
-    if (!name || !github || !img) {
+export const addProject = async (name: string, github: string, img: string, visitUrl: string = "", description: string) => {
+    if (!name || !github || !img || !description) {
         return { message: "All fiedls are required!", success: false }
     }
 
@@ -53,12 +53,12 @@ export const addProject = async (name: string, github: string, img: string, visi
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name, github, img, visitUrl }),
+            body: JSON.stringify({ name, github, img, visitUrl, description }),
         });
         const data = await res.json();
 
         if (!data.success) {
-            return { message: "Cannot add project!", success: false }
+            return { message: data?.message || "Cannot add project!", success: false }
         }
 
         return { message: "Project added!", success: true }
@@ -86,7 +86,7 @@ export const removeProject = async (id: string) => {
         const data = await res.json();
 
         if (!data.success) {
-            return { message: "Cannot remove project!", success: false }
+            return { message: data?.message || "Cannot remove project!", success: false }
         }
 
         return { message: "Project removed!", success: true }
@@ -113,7 +113,7 @@ export const addSkill = async (name: string, logoUrl: string = "") => {
         const data = await res.json()
 
         if (!data?.success) {
-            return { message: "Cannot add skill!", success: false }
+            return { message: data?.message || "Cannot add skill!", success: false }
         }
 
         return { message: "Skill added!", success: true }
@@ -141,7 +141,7 @@ export const removeSkill = async (id: string) => {
         const data = await res.json()
 
         if (!data?.success) {
-            return { message: "Cannot remove skill!", success: false }
+            return { message: data?.message || "Cannot remove skill!", success: false }
         }
 
         return { message: "Skill removed!", success: true }
@@ -164,7 +164,7 @@ export const updateContacts = async (linkedin: string = "", twitter: string = ""
         const data = await res.json()
 
         if (!data.success) {
-            return { message: "Cannot update contacts!", success: false }
+            return { message: data?.message || "Cannot update contacts!", success: false }
         }
 
         return { message: "Contacts updated!", success: true, contacts: data.contacts }

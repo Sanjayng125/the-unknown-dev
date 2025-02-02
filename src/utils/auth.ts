@@ -17,9 +17,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                     const res = await login(credentials.email as string, credentials.password as string)
 
-                    console.log(res);
-
-
                     if (!res?.success) {
                         throw new Error("Invalid Credentials!")
                     }

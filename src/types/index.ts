@@ -9,6 +9,7 @@ export interface ProjectProps {
     name: string;
     github: string;
     img: string;
+    description: string;
     visitUrl?: string;
     visit?: string;
 }

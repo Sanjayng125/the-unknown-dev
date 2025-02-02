@@ -25,6 +25,10 @@ const myProjectSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+    },
     visitUrl: {
         type: String,
         default: "",

@@ -8,8 +8,6 @@ export const POST = async (req: Request) => {
     const session = await auth();
 
     if (!session?.user) {
-        console.log(session);
-
         return Response.json({ success: false, message: 'User not authenticated.' });
     }
 
@@ -27,7 +25,11 @@ export const POST = async (req: Request) => {
         );
 
         if (!res) {
-            return Response.json({ success: false, message: 'Cannot update details!' });
+            const res = await Details.create({ email: session.user.email, name, welcomeMsg, sub });
+
+            if (!res) {
+                return Response.json({ success: false, message: 'Cannot update details!' });
+            }
         }
 
         return Response.json({ success: true, message: 'Details updated!', details: res });

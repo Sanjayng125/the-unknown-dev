@@ -11,15 +11,15 @@ export const POST = async (req: Request) => {
     }
 
     try {
-        const { name, github, img, visitUrl = "" } = await req.json();
+        const { name, github, img, visitUrl = "", description } = await req.json();
 
-        if (!name || !github || !img) {
+        if (!name || !github || !img || !description) {
             return NextResponse.json({ success: false, message: 'All fields are required!' });
         }
 
         await connectToDb();
 
-        const project = await MyProject.create({ name, github, img, visitUrl });
+        const project = await MyProject.create({ name, github, img, visitUrl, description });
 
         if (!project) {
             return NextResponse.json({ success: false, message: 'Cannot add project!' });
@@ -48,7 +48,11 @@ export const DELETE = async (req: Request) => {
 
         await connectToDb();
 
-        await MyProject.findByIdAndDelete(id);
+        const res = await MyProject.findOneAndDelete({ _id: id });
+
+        if (!res) {
+            return NextResponse.json({ success: false, message: "Cannot remove project!" });
+        }
 
         return NextResponse.json({ success: true, message: "Project removed!" });
     } catch (error) {

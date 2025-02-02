@@ -14,7 +14,7 @@ const Project = ({
   onRemove?: (id: string) => void;
 }) => {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 border-2 p-2 rounded-xl">
       <div className="w-full relative">
         <a href={project?.visitUrl || project?.visit || "/"} target="_blank">
           <div className="absolute bg-black bg-opacity-0 w-full h-full flex justify-center items-center hover:bg-opacity-50">
@@ -28,7 +28,7 @@ const Project = ({
             alt={project.name}
             width={200}
             height={200}
-            className="w-full aspect-auto"
+            className="w-full aspect-video object-contain"
           />
         </a>
       </div>
@@ -52,6 +52,9 @@ const Project = ({
           </button>
         )}
       </div>
+      {project?.description && (
+        <p className="text-sm text-gray-500">{project.description}</p>
+      )}
     </div>
   );
 };

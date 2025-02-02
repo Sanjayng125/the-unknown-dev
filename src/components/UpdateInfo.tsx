@@ -76,7 +76,7 @@ const UpdateInfo = () => {
 
       <div className="flex flex-col mt-5">
         <button
-          className="bg-blue-500 text-white p-2 rounded-xl w-max disabled:bg-opacity-50"
+          className="bg-blue-500 text-white p-2 rounded-xl w-max disabled:bg-opacity-50 hover:bg-opacity-50"
           onClick={handleUpdateDetails}
           disabled={loading}
         >

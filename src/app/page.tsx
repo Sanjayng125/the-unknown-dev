@@ -22,7 +22,7 @@ const Page = () => {
 
   return (
     <div className="w-full h-full pt-5 px-2 sm:px-10 flex flex-col items-center relative">
-      {store.loading && <Loader />}
+      {store.loading && !store.name && <Loader />}
       {!store.loading && (
         <>
           <div className="flex md:h-[85vh] md:items-center">
