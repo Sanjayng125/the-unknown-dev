@@ -96,7 +96,7 @@ const UpdateSkill = () => {
         </button>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-5 bg-gray-900 p-3 rounded-xl justify-evenly">
+      <div className="mt-5 flex flex-wrap gap-2 sm:gap-5 bg-gray-900 p-3 rounded-xl justify-evenly">
         {skills?.length > 0 &&
           skills.map((skill, i) => (
             <Skill

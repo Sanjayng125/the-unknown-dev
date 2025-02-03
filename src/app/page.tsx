@@ -62,7 +62,7 @@ const Page = () => {
 
             <div className="w-full border-b-2 border-white py-3" />
 
-            <div className="mt-5 flex flex-wrap gap-5 bg-gray-900 p-3 rounded-xl justify-evenly">
+            <div className="mt-5 flex flex-wrap gap-2 sm:gap-5 bg-gray-900 p-2 sm:p-3 rounded-xl justify-evenly">
               {store?.skills?.length > 0 &&
                 store.skills.map((skill, i) => <Skill skill={skill} key={i} />)}
               {!store?.skills?.length && !store.loading && (
