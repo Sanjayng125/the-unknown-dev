@@ -6,6 +6,7 @@ import Skill from "@/components/Skill";
 import useDetailsStore from "@/context/mystore";
 import Image from "next/image";
 import React, { useEffect } from "react";
+import { FaGithub } from "react-icons/fa";
 
 const Page = () => {
   const store = useDetailsStore();
@@ -39,12 +40,24 @@ const Page = () => {
               <p className="text-lg sm:text-xl mt-5">
                 {store?.sub || (!store.loading && "About you")}
               </p>
-              <button
-                className="mt-5 bg-purple-700 w-max px-5 py-3 rounded-xl text-xl font-semibold"
-                onClick={handleScroll}
-              >
-                Projects
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  className="mt-5 bg-purple-700 w-max px-5 py-3 rounded-xl text-xl font-semibold"
+                  onClick={handleScroll}
+                >
+                  Projects
+                </button>
+                {store?.contacts?.github && (
+                  <a
+                    className="mt-5 bg-gray-900 border-2 w-max px-5 py-3 rounded-xl text-xl font-semibold flex items-center gap-2"
+                    href={store?.contacts?.github || ""}
+                    target="_blank"
+                  >
+                    <span>Github</span>
+                    <FaGithub />
+                  </a>
+                )}
+              </div>
             </div>
             <div className="w-full flex justify-center items-center max-md:hidden">
               <Image
