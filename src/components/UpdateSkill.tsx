@@ -3,7 +3,7 @@
 import useDetailsStore from "@/context/mystore";
 import { addSkill, getMySkills, removeSkill } from "@/utils/actions";
 import React, { useState } from "react";
-import Skill from "./Skill";
+import Skill from "./SkillBadge";
 
 const UpdateSkill = () => {
   const [skill, setSkill] = useState("");

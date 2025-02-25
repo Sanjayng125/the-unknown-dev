@@ -1,5 +1,6 @@
 import { ProjectProps } from "@/types";
 import { ArrowRight, ExternalLink } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const Project = ({
@@ -23,7 +24,7 @@ const Project = ({
               <ArrowRight />
             </p>
           </div>
-          <img
+          <Image
             src={project?.img}
             alt={project.name}
             width={200}

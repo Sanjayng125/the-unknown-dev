@@ -2,7 +2,7 @@
 
 import useDetailsStore from "@/context/mystore";
 import React, { useState } from "react";
-import Project from "./Project";
+import Project from "./ProjectCard";
 import { addProject, getMyProjects, removeProject } from "@/utils/actions";
 
 const UpdateProject = () => {

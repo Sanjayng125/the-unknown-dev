@@ -1,21 +1,16 @@
 "use client";
 
+import Hero from "@/components/Hero";
 import Loader from "@/components/Loader";
-import Project from "@/components/Project";
-import Skill from "@/components/Skill";
+import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
 import useDetailsStore from "@/context/mystore";
-import Image from "next/image";
 import React, { useEffect } from "react";
-import { FaGithub } from "react-icons/fa";
 
 const Page = () => {
   const store = useDetailsStore();
 
   const projectsRef = React.useRef<HTMLDivElement | null>(null);
-
-  const handleScroll = () => {
-    projectsRef?.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
     store.fetchData();
@@ -28,90 +23,22 @@ const Page = () => {
         <></>
       ) : (
         <>
-          <div className="flex md:h-[85vh] md:items-center">
-            <div className="flex flex-col w-full">
-              <h1 className="text-4xl sm:text-5xl font-semibold">
-                {store?.welcomeMsg || (!store.loading && "Hey there! I'm")}{" "}
-                <span className="text-purple-700">
-                  {`${store?.name}` ||
-                    (!store.loading && store.name === "" && "Your Name.")}
-                </span>
-              </h1>
-              <p className="text-lg sm:text-xl mt-5">
-                {store?.sub || (!store.loading && "About you")}
-              </p>
-              <div className="flex items-center gap-2">
-                <button
-                  className="mt-5 bg-purple-700 w-max px-5 py-3 rounded-xl text-xl font-semibold"
-                  onClick={handleScroll}
-                >
-                  Projects
-                </button>
-                {store?.contacts?.github && (
-                  <a
-                    className="mt-5 bg-gray-900 border-2 w-max px-5 py-3 rounded-xl text-xl font-semibold flex items-center gap-2"
-                    href={store?.contacts?.github || ""}
-                    target="_blank"
-                  >
-                    <span>Github</span>
-                    <FaGithub />
-                  </a>
-                )}
-              </div>
-            </div>
-            <div className="w-full flex justify-center items-center max-md:hidden">
-              <Image
-                src={"/bg.png"}
-                alt="bg"
-                width={500}
-                height={500}
-                className="w-3/4"
-              />
-            </div>
-          </div>
+          <Hero
+            name={store.name}
+            welcomeMsg={store.welcomeMsg}
+            sub={store.sub}
+            github={store.contacts.github}
+            projectsRef={projectsRef}
+            loading={store.loading}
+          />
 
-          <div className="flex flex-col mt-10 w-full">
-            <h1 className="text-4xl font-semibold text-center">My Skills</h1>
+          <Skills skills={store.skills} loading={store.loading} />
 
-            <div className="w-full border-b-2 border-white py-3" />
-
-            <div className="mt-5 flex flex-wrap gap-2 sm:gap-5 bg-gray-900 p-2 sm:p-3 rounded-xl justify-evenly">
-              {store?.skills?.length > 0 &&
-                store.skills.map((skill, i) => <Skill skill={skill} key={i} />)}
-              {!store?.skills?.length && !store.loading && (
-                <p className="text-center">Add your skills to see them here</p>
-              )}
-            </div>
-          </div>
-
-          <div
-            className="mt-10 flex flex-col items-center w-full"
-            ref={projectsRef}
-          >
-            <h1 className="text-4xl font-semibold text-center">
-              My Recent Projects
-            </h1>
-
-            <div className="w-full border-b-2 border-white py-3" />
-
-            <div
-              className={`${
-                store?.projects?.length > 0
-                  ? "grid sm:grid-cols-2 place-content-center lg:grid-cols-3"
-                  : ""
-              } gap-5 mt-5 w-full`}
-            >
-              {store?.projects?.length > 0 &&
-                store.projects.map((project, i) => (
-                  <Project project={project} key={i} />
-                ))}
-              {!store?.projects?.length && !store.loading && (
-                <p className="text-center">
-                  Add your projects to see them here
-                </p>
-              )}
-            </div>
-          </div>
+          <Projects
+            projects={store.projects}
+            loading={store.loading}
+            projectsRef={projectsRef}
+          />
         </>
       )}
     </div>
