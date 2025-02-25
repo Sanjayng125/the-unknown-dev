@@ -8,7 +8,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FiMail } from "react-icons/fi";
 
 const Footer = () => {
-  const { contacts } = useDetailsStore();
+  const { contacts, loading } = useDetailsStore();
 
   return (
     <footer className="w-full flex items-center mt-5 bg-gray-900 p-5">
@@ -63,7 +63,11 @@ const Footer = () => {
             )}
           </div>
         ) : (
-          <p className="text-center">Add your contacts to see them here</p>
+          <>
+            {!loading && (
+              <p className="text-center">Add your contacts to see them here</p>
+            )}
+          </>
         )}
 
         <p className="text-center text-sm text-gray-400">
