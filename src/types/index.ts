@@ -35,6 +35,7 @@ export interface MyDetailsProps {
     projects: ProjectProps[];
     skills: SkillProps[];
     contacts: ContactProps;
+    visitCount: number
     loading: boolean
 
     setDetails: (details: DetailsProps) => void;

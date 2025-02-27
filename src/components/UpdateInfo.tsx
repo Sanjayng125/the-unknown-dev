@@ -2,10 +2,10 @@
 
 import useDetailsStore from "@/context/mystore";
 import { editDetails } from "@/utils/actions";
-import React from "react";
+import React, { useEffect } from "react";
 
 const UpdateInfo = () => {
-  const { name, welcomeMsg, sub, setDetails, loading, setLoading } =
+  const { name, welcomeMsg, sub, setDetails, visitCount, loading, setLoading } =
     useDetailsStore();
 
   const handleUpdateDetails = async () => {
@@ -26,6 +26,10 @@ const UpdateInfo = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log(visitCount);
+  }, [visitCount]);
 
   return (
     <>
@@ -74,7 +78,8 @@ const UpdateInfo = () => {
         />
       </div>
 
-      <div className="flex flex-col mt-5">
+      <div className="flex flex-col mt-5 gap-y-1">
+        <p className="font-semibold">Visit count: {visitCount}</p>
         <button
           className="bg-blue-500 text-white p-2 rounded-xl w-max disabled:bg-opacity-50 hover:bg-opacity-50"
           onClick={handleUpdateDetails}

@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import useDetailsStore from "@/context/mystore";
+import { updatevisitCount } from "@/utils/actions";
 import React, { useEffect } from "react";
 
 const Page = () => {
@@ -14,6 +15,21 @@ const Page = () => {
 
   useEffect(() => {
     store.fetchData();
+  }, []);
+
+  useEffect(() => {
+    const handleVisitCount = async () => {
+      const visited = localStorage.getItem("theunknowndev-sng");
+
+      if (!visited) {
+        const res = await updatevisitCount();
+        if (res.success) {
+          localStorage.setItem("theunknowndev-sng", "1");
+        }
+      }
+    };
+
+    handleVisitCount();
   }, []);
 
   return (

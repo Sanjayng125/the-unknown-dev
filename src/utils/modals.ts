@@ -86,8 +86,16 @@ const contactsSchema = new mongoose.Schema({
     },
 })
 
+const visitCountSchema = new mongoose.Schema({
+    count: {
+        type: Number,
+        required: true
+    }
+})
+
 export const User = mongoose.models?.User || mongoose.model("User", userSchema)
 export const MyProject = mongoose.models?.MyProject || mongoose.model("MyProject", myProjectSchema)
 export const MySkills = mongoose.models?.MySkills || mongoose.model("MySkills", mySkillsSchema)
 export const Details = mongoose.models?.Details || mongoose.model("Details", detailsSchema)
 export const MyContacts = mongoose.models?.Contacts || mongoose.model("Contacts", contactsSchema)
+export const MyVisitCount = mongoose.models?.VisitCount || mongoose.model("VisitCount", visitCountSchema)

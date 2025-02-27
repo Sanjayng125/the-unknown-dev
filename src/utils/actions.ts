@@ -233,3 +233,40 @@ export const getMyContacts = async () => {
         return { message: "Something went wrong while getting contacts!", success: false }
     }
 }
+
+export const updatevisitCount = async () => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visitCount`, {
+            method: "POST"
+        })
+
+        const data = await res.json()
+
+        if (data?.success) {
+            return { success: true, count: data.visitCount.count }
+        }
+
+        return { success: false }
+    } catch (error) {
+        console.log(error);
+        return { message: "Something went wrong while updating visits count!", success: false }
+    }
+}
+
+export const getMyVisitCount = async () => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visitCount`)
+
+        const data = await res.json()
+
+        if (data?.success) {
+            return { count: data?.visitCount?.count || 0, success: true }
+        }
+
+        return { success: false }
+    } catch (error) {
+        console.log(error);
+        return { message: "Something went wrong while getting visits count!", success: false }
+    }
+}
+

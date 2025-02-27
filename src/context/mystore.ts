@@ -2,7 +2,7 @@
 
 import { MyDetailsProps } from "@/types";
 import { create } from "zustand";
-import { getMyContacts, getMyDetails, getMyProjects, getMySkills } from "@/utils/actions";
+import { getMyContacts, getMyDetails, getMyProjects, getMySkills, getMyVisitCount } from "@/utils/actions";
 
 const useDetailsStore = create<MyDetailsProps>()(
     (set, get) => ({
@@ -18,6 +18,7 @@ const useDetailsStore = create<MyDetailsProps>()(
             github: "",
             instagram: "",
         },
+        visitCount: 0,
         loading: false,
 
         setDetails: (details) => set({ name: details.name, welcomeMsg: details.welcomeMsg, sub: details.sub }),
@@ -35,6 +36,7 @@ const useDetailsStore = create<MyDetailsProps>()(
                 const details = await getMyDetails();
                 const projects = await getMyProjects();
                 const skills = await getMySkills();
+                const visitCount = await getMyVisitCount()
                 const contacts = await getMyContacts();
 
                 set({
@@ -43,6 +45,7 @@ const useDetailsStore = create<MyDetailsProps>()(
                     sub: details?.details?.sub || state.sub,
                     projects: projects?.projects && projects.projects.length > 0 ? projects.projects : state.projects,
                     skills: skills?.skills && skills.skills.length > 0 ? skills.skills : state.skills,
+                    visitCount: visitCount?.count || state.visitCount,
                     contacts: contacts?.contacts || state.contacts,
                 });
             } catch (error) {
