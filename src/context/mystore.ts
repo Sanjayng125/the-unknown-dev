@@ -33,11 +33,19 @@ const useDetailsStore = create<MyDetailsProps>()(
             try {
                 set({ loading: true });
 
-                const details = await getMyDetails();
-                const projects = await getMyProjects();
-                const skills = await getMySkills();
-                const visitCount = await getMyVisitCount()
-                const contacts = await getMyContacts();
+                const [
+                    details,
+                    projects,
+                    skills,
+                    visitCount,
+                    contacts
+                ] = await Promise.all([
+                    getMyDetails(),
+                    getMyProjects(),
+                    getMySkills(),
+                    getMyVisitCount(),
+                    getMyContacts()
+                ])
 
                 set({
                     name: details?.details?.name || state.name,
