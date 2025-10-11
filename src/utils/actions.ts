@@ -1,6 +1,6 @@
 export const login = async (email: string, password: string) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        const res = await fetch(`/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const editDetails = async (name: string, welcomeMsg: string, sub: string)
     }
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/details`, {
+        const res = await fetch(`/api/details`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const addProject = async (name: string, github: string, img: string, visi
     }
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project`, {
+        const res = await fetch(`/api/project`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -68,6 +68,33 @@ export const addProject = async (name: string, github: string, img: string, visi
     }
 }
 
+export const updateProjectOrder = async (projectIds: string[]) => {
+    if (!projectIds || projectIds.length === 0) {
+        return { message: "Project ids are required!", success: false }
+    }
+
+    try {
+        const res = await fetch(`/api/project`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ projectIds }),
+        });
+
+        const data = await res.json()
+
+        if (!data?.success) {
+            return { message: data?.message || "Cannot update projects order!", success: false }
+        }
+
+        return { message: "Projects order updated!", success: true }
+    } catch (error) {
+        console.log(error);
+        return { message: "Something went wrong while updating projects order!", success: false }
+    }
+}
+
 export const removeProject = async (id: string) => {
     if (!id) {
         return { message: "All fiedls are required!", success: false }
@@ -75,7 +102,7 @@ export const removeProject = async (id: string) => {
 
     try {
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project`, {
+        const res = await fetch(`/api/project`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -102,7 +129,7 @@ export const addSkill = async (name: string, logoUrl: string = "") => {
     }
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/skill`, {
+        const res = await fetch(`/api/skill`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -123,6 +150,33 @@ export const addSkill = async (name: string, logoUrl: string = "") => {
     }
 }
 
+export const updateSkillOrder = async (skillIds: string[]) => {
+    if (!skillIds || skillIds.length === 0) {
+        return { message: "Skill ids are required!", success: false }
+    }
+
+    try {
+        const res = await fetch(`/api/skill`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ skillIds }),
+        });
+
+        const data = await res.json()
+
+        if (!data?.success) {
+            return { message: data?.message || "Cannot update skills order!", success: false }
+        }
+
+        return { message: "Skills order updated!", success: true }
+    } catch (error) {
+        console.log(error);
+        return { message: "Something went wrong while updating skills order!", success: false }
+    }
+}
+
 export const removeSkill = async (id: string) => {
     if (!id) {
         return { message: "All fiedls are required!", success: false }
@@ -130,7 +184,7 @@ export const removeSkill = async (id: string) => {
 
     try {
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/skill`, {
+        const res = await fetch(`/api/skill`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -153,7 +207,7 @@ export const removeSkill = async (id: string) => {
 
 export const updateContacts = async (linkedin: string = "", twitter: string = "", github: string = "", instagram: string = "") => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contacts`, {
+        const res = await fetch(`/api/contacts`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -176,7 +230,7 @@ export const updateContacts = async (linkedin: string = "", twitter: string = ""
 
 export const getMyDetails = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/details`)
+        const res = await fetch(`/api/details`)
 
         const data = await res.json()
 
@@ -193,7 +247,7 @@ export const getMyDetails = async () => {
 
 export const getMyProjects = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project`)
+        const res = await fetch(`/api/project`)
 
         const data = await res.json()
 
@@ -206,7 +260,7 @@ export const getMyProjects = async () => {
 
 export const getMySkills = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/skill`)
+        const res = await fetch(`/api/skill`)
 
         const data = await res.json()
 
@@ -219,7 +273,7 @@ export const getMySkills = async () => {
 
 export const getMyContacts = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contacts`)
+        const res = await fetch(`/api/contacts`)
 
         const data = await res.json()
 
@@ -236,7 +290,7 @@ export const getMyContacts = async () => {
 
 export const updatevisitCount = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visitCount`, {
+        const res = await fetch(`/api/visitCount`, {
             method: "POST"
         })
 
@@ -255,7 +309,7 @@ export const updatevisitCount = async () => {
 
 export const getMyVisitCount = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visitCount`)
+        const res = await fetch(`/api/visitCount`)
 
         const data = await res.json()
 

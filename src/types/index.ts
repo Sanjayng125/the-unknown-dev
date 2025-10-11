@@ -1,17 +1,19 @@
 export interface SkillProps {
-    _id?: string;
+    _id: string;
     name: string;
     logoUrl: string;
+    order: number;
 }
 
 export interface ProjectProps {
-    _id?: string;
+    _id: string;
     name: string;
     github: string;
     img: string;
     description: string;
     visitUrl?: string;
     visit?: string;
+    order: number;
 }
 
 export interface DetailsProps {

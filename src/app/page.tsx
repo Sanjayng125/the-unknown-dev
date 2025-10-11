@@ -35,9 +35,7 @@ const Page = () => {
   return (
     <div className="w-full h-full pt-5 px-2 sm:px-10 flex flex-col items-center relative">
       {store.loading && !store.name && <Loader />}
-      {store.loading && !store?.name ? (
-        <></>
-      ) : (
+      {store?.name && (
         <>
           <Hero
             name={store.name}

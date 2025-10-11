@@ -19,9 +19,12 @@ export const POST = async (req: Request) => {
 
         await connectToDb();
 
+        const skillCount = await MySkills.countDocuments();
+
         const skill = {
             name,
             logoUrl: logoUrl || "",
+            order: skillCount,
         };
 
         const res = await MySkills.create(skill);
@@ -31,6 +34,33 @@ export const POST = async (req: Request) => {
         }
 
         return NextResponse.json({ success: true, message: "Skill added!" });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ success: false, message: "Something went wrong while adding skill!" });
+    }
+};
+
+export const PUT = async (req: Request) => {
+    const session = await auth();
+
+    if (!session) {
+        return NextResponse.json({ success: false, message: "User not authenticated." });
+    }
+
+    try {
+        const { skillIds }: { skillIds: string[] } = await req.json();
+
+        if (!skillIds || skillIds.length === 0) {
+            return NextResponse.json({ success: false, message: "Bad request!" });
+        }
+
+        await connectToDb();
+
+        await Promise.all(
+            skillIds.map((id, index) => MySkills.findByIdAndUpdate(id, { order: index }))
+        )
+
+        return NextResponse.json({ success: true, message: "Skills order updated!" });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ success: false, message: "Something went wrong while adding skill!" });
@@ -67,7 +97,7 @@ export const GET = async () => {
     try {
         await connectToDb();
 
-        const skills = await MySkills.find();
+        const skills = await MySkills.find().sort({ order: 1 });
 
         return NextResponse.json({ success: true, skills });
     } catch (error) {

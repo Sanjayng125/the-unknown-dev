@@ -32,7 +32,8 @@ const myProjectSchema = new mongoose.Schema({
     visitUrl: {
         type: String,
         default: "",
-    }
+    },
+    order: { type: Number, default: 0 }
 });
 
 const mySkillsSchema = new mongoose.Schema({
@@ -43,6 +44,10 @@ const mySkillsSchema = new mongoose.Schema({
     logoUrl: {
         type: String,
         default: ""
+    },
+    order: {
+        type: Number,
+        default: 0
     }
 })
 

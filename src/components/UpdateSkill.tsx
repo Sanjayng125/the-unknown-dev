@@ -1,8 +1,20 @@
 "use client";
 
-import useDetailsStore from "@/context/mystore";
-import { addSkill, getMySkills, removeSkill } from "@/utils/actions";
 import React, { useState } from "react";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
+import useDetailsStore from "@/context/mystore";
+import {
+  addSkill,
+  getMySkills,
+  removeSkill,
+  updateSkillOrder,
+} from "@/utils/actions";
 import Skill from "./SkillBadge";
 
 const UpdateSkill = () => {
@@ -13,39 +25,26 @@ const UpdateSkill = () => {
   const refreshSkills = async () => {
     try {
       setLoading(true);
-      const skills = await getMySkills();
-      if (skills?.success && skills?.skills?.length) {
-        setSkills(skills.skills);
+      const skillsRes = await getMySkills();
+      if (skillsRes?.success) {
+        setSkills(skillsRes.skills);
       }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong while getting skills");
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddSkill = async () => {
-    if (!skill) {
-      alert("Please enter a skill name");
-      return;
-    }
-
+    if (!skill) return alert("Please enter a skill name");
     try {
       setLoading(true);
       const res = await addSkill(skill, skillLogoUrl);
-      if (res?.success) {
-        await refreshSkills();
-
-        setSkill("");
-        setSkillLogoUrl("");
-      }
-      if (res?.message) {
-        alert(res.message);
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Something went wrong while adding skill");
+      if (res?.success) await refreshSkills();
+      setSkill("");
+      setSkillLogoUrl("");
+      alert(res?.message);
     } finally {
       setLoading(false);
     }
@@ -55,25 +54,28 @@ const UpdateSkill = () => {
     try {
       setLoading(true);
       const res = await removeSkill(id);
-      if (res?.success) {
-        await refreshSkills();
-      }
+      if (res?.success) await refreshSkills();
       alert(res?.message);
-    } catch (error) {
-      console.log(error);
-      alert("Something went wrong while removing skill");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = skills.findIndex((s) => s.order === active.id);
+    const newIndex = skills.findIndex((s) => s.order === over.id);
+    const newSkills = arrayMove(skills, oldIndex, newIndex);
+
+    setSkills(newSkills);
+    await updateSkillOrder(newSkills.map((s) => s._id));
+  };
+
   return (
     <div className="flex flex-col mt-5">
-      <div className="flex items-center gap-2">
-        <p className="text-xl font-bold">Add Skill</p>
-        <p className="text-sm">(* - Required Fields)</p>
-      </div>
-
+      <p className="text-xl font-bold mb-3">Add Skill</p>
       <div className="flex flex-col gap-3">
         <input
           className="bg-gray-950 p-3 rounded-xl border"
@@ -96,21 +98,29 @@ const UpdateSkill = () => {
         </button>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2 sm:gap-5 bg-gray-900 p-3 rounded-xl justify-evenly">
-        {skills?.length > 0 &&
-          skills.map((skill, i) => (
-            <Skill
-              skill={skill}
-              edit={true}
-              loading={loading}
-              onRemove={handleRemoveSkill}
-              key={i}
-            />
-          ))}
-        {!skills?.length && !loading && (
-          <p className="text-center">Add your skills to see them here</p>
-        )}
-      </div>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToParentElement]}
+      >
+        <SortableContext
+          items={skills.map((s) => s.order)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="mt-5 flex flex-wrap gap-2 sm:gap-5 bg-gray-900 p-3 rounded-xl justify-evenly">
+            {skills?.length > 0 &&
+              skills.map((skill) => (
+                <Skill
+                  key={skill.order}
+                  skill={skill}
+                  edit={true}
+                  loading={loading}
+                  onRemove={handleRemoveSkill}
+                />
+              ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 };

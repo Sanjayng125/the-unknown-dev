@@ -3,7 +3,20 @@
 import useDetailsStore from "@/context/mystore";
 import React, { useState } from "react";
 import Project from "./ProjectCard";
-import { addProject, getMyProjects, removeProject } from "@/utils/actions";
+import {
+  addProject,
+  getMyProjects,
+  removeProject,
+  updateProjectOrder,
+} from "@/utils/actions";
+
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 const UpdateProject = () => {
   const [projectName, setProjectName] = useState("");
@@ -18,10 +31,7 @@ const UpdateProject = () => {
     try {
       setLoading(true);
       const res = await getMyProjects();
-
-      if (res?.success) {
-        setProjects(res.projects);
-      }
+      if (res?.success) setProjects(res.projects);
     } catch (error) {
       console.log(error);
       alert("Something went wrong while getting projects");
@@ -40,15 +50,16 @@ const UpdateProject = () => {
         projectVisitUrl,
         projectDescription
       );
+
       if (res?.success) {
         await refreshProjects();
-
         setProjectName("");
         setProjectGithub("");
         setProjectImg("");
         setProjectDescription("");
         setProjectVisitUrl("");
       }
+
       alert(res?.message);
     } catch (error) {
       console.log(error);
@@ -62,9 +73,7 @@ const UpdateProject = () => {
     try {
       setLoading(true);
       const res = await removeProject(id);
-      if (res?.success) {
-        await refreshProjects();
-      }
+      if (res?.success) await refreshProjects();
       alert(res?.message);
     } catch (error) {
       console.log(error);
@@ -72,6 +81,18 @@ const UpdateProject = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = projects.findIndex((p) => p.order === active.id);
+    const newIndex = projects.findIndex((p) => p.order === over.id);
+    const newProjects = arrayMove(projects, oldIndex, newIndex);
+
+    setProjects(newProjects);
+    await updateProjectOrder(newProjects.map((p) => p._id));
   };
 
   return (
@@ -122,27 +143,39 @@ const UpdateProject = () => {
         </button>
       </div>
 
-      <div
-        className={`${
-          projects?.length > 0
-            ? "grid sm:grid-cols-2  place-content-center lg:grid-cols-3 border-t-2 pt-3"
-            : ""
-        } gap-5 mt-5 w-full`}
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToParentElement]}
       >
-        {projects?.length > 0 &&
-          projects.map((project, i) => (
-            <Project
-              project={project}
-              edit={true}
-              loading={loading}
-              onRemove={handleRemoveProject}
-              key={i}
-            />
-          ))}
-        {!projects?.length && !loading && (
-          <p className="text-center">Add your projects to see them here</p>
-        )}
-      </div>
+        <SortableContext
+          items={projects.map((p) => p.order)}
+          strategy={rectSortingStrategy}
+        >
+          <div
+            className={`${
+              projects?.length > 0
+                ? "grid sm:grid-cols-2 place-content-center lg:grid-cols-3 border-t-2 pt-3"
+                : ""
+            } gap-5 mt-5 w-full`}
+          >
+            {projects?.length > 0 &&
+              projects.map((project) => (
+                <Project
+                  key={project.order}
+                  project={project}
+                  edit={true}
+                  loading={loading}
+                  onRemove={handleRemoveProject}
+                />
+              ))}
+
+            {!projects?.length && !loading && (
+              <p className="text-center">Add your projects to see them here</p>
+            )}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 };
