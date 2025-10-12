@@ -10,7 +10,15 @@ import {
   updateProjectOrder,
 } from "@/utils/actions";
 
-import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -83,6 +91,20 @@ const UpdateProject = () => {
     }
   };
 
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 300,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -147,6 +169,7 @@ const UpdateProject = () => {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         modifiers={[restrictToParentElement]}
+        sensors={sensors}
       >
         <SortableContext
           items={projects.map((p) => p.order)}

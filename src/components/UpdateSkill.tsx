@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -61,6 +69,20 @@ const UpdateSkill = () => {
     }
   };
 
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 300,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -102,6 +124,7 @@ const UpdateSkill = () => {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         modifiers={[restrictToParentElement]}
+        sensors={sensors}
       >
         <SortableContext
           items={skills.map((s) => s.order)}

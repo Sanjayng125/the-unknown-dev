@@ -228,6 +228,23 @@ export const updateContacts = async (linkedin: string = "", twitter: string = ""
     }
 }
 
+export const getPortfolioData = async () => {
+    try {
+        const res = await fetch(`/api/portfolio`)
+
+        const data = await res.json()
+
+        if (data?.success) {
+            return { data: data.data, success: true }
+        }
+
+        return { success: false }
+    } catch (error) {
+        console.log(error);
+        return { message: "Something went wrong while getting details!", success: false }
+    }
+}
+
 export const getMyDetails = async () => {
     try {
         const res = await fetch(`/api/details`)

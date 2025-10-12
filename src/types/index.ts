@@ -12,7 +12,6 @@ export interface ProjectProps {
     img: string;
     description: string;
     visitUrl?: string;
-    visit?: string;
     order: number;
 }
 

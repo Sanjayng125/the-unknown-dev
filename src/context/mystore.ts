@@ -9,6 +9,7 @@ import {
     getMyProjects,
     getMySkills,
     getMyVisitCount,
+    getPortfolioData,
 } from "@/utils/actions";
 
 const useDetailsStore = create<MyDetailsProps>()(
@@ -41,32 +42,27 @@ const useDetailsStore = create<MyDetailsProps>()(
             setLoading: (state) => set({ loading: state }),
 
             fetchData: async () => {
-                const state = get();
                 try {
                     set({ loading: true });
 
-                    const [details, projects, skills, visitCount, contacts] =
-                        await Promise.all([
-                            getMyDetails(),
-                            getMyProjects(),
-                            getMySkills(),
-                            getMyVisitCount(),
-                            getMyContacts(),
-                        ]);
+                    const portfolioData = await getPortfolioData();
 
-                    set({
-                        name: details?.details?.name || state.name,
-                        welcomeMsg: details?.details?.welcomeMsg || state.welcomeMsg,
-                        sub: details?.details?.sub || state.sub,
-                        projects:
-                            projects?.projects?.length > 0
-                                ? projects.projects
-                                : state.projects,
-                        skills:
-                            skills?.skills?.length > 0 ? skills.skills : state.skills,
-                        visitCount: visitCount?.count || state.visitCount,
-                        contacts: contacts?.contacts || state.contacts,
-                    });
+                    console.log(portfolioData);
+
+                    if (portfolioData?.success) {
+
+                        const { details, projects, skills, contacts, visitCount } = portfolioData.data;
+
+                        set({
+                            name: details.name,
+                            welcomeMsg: details.welcomeMsg,
+                            sub: details.sub,
+                            projects: projects,
+                            skills: skills,
+                            contacts: contacts,
+                            visitCount: visitCount,
+                        });
+                    }
                 } catch (error) {
                     console.error("Failed to fetch details:", error);
                 } finally {

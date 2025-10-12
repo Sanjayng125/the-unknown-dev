@@ -37,16 +37,18 @@ const Project = ({
     >
       <div className="w-full relative">
         <a
-          href={project?.visitUrl || project?.visit || "/"}
+          href={project?.visitUrl || "#"}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="absolute bg-black bg-opacity-0 w-full h-full flex justify-center items-center hover:bg-opacity-50 transition">
-            <p className="text-xl font-semibold opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center gap-2">
-              Visit
-              <ArrowRight />
-            </p>
-          </div>
+          {project?.visitUrl && (
+            <div className="absolute bg-black bg-opacity-0 w-full h-full flex justify-center items-center hover:bg-opacity-50 transition">
+              <p className="text-xl font-semibold opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center gap-2">
+                Visit
+                <ArrowRight />
+              </p>
+            </div>
+          )}
           <Image
             src={project?.img}
             alt={project.name}
