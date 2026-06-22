@@ -47,7 +47,7 @@ const useDetailsStore = create<MyDetailsProps>()(
 
                     const portfolioData = await getPortfolioData();
 
-                    console.log(portfolioData);
+                    // console.log(portfolioData);
 
                     if (portfolioData?.success) {
 

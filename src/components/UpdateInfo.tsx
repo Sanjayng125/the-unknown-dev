@@ -27,10 +27,6 @@ const UpdateInfo = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(visitCount);
-  }, [visitCount]);
-
   return (
     <>
       <div className="flex flex-col gap-1">
