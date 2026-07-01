@@ -12,7 +12,7 @@ const Page = () => {
   const store = useDetailsStore();
 
   useEffect(() => {
-    if (store && !store.name) {
+    if (store) {
       store.fetchData();
     }
   }, [store?.name]);
